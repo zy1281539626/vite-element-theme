@@ -14,6 +14,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.1",
+    "sass": "^1.51.0",
+    "unplugin-vue-components": "^0.19.3",
     "vite": "^2.9.5"
   }
 }
