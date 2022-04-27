@@ -1,7 +1,9 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@element-plus/colors': ^0.0.1-beta.7
   '@vitejs/plugin-vue': ^2.3.1
+  '@vueuse/core': ^8.3.1
   element-plus: ^2.1.11
   sass: ^1.51.0
   unplugin-vue-components: ^0.19.3
@@ -9,6 +11,8 @@ specifiers:
   vue: ^3.2.25
 
 dependencies:
+  '@element-plus/colors': 0.0.1-beta.7
+  '@vueuse/core': 8.3.1_vue@3.2.33
   element-plus: 2.1.11_vue@3.2.33
   vue: 3.2.33
 
@@ -33,6 +37,12 @@ packages:
   /@ctrl/tinycolor/3.4.1:
     resolution: {integrity: sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==}
     engines: {node: '>=10'}
+    dev: false
+
+  /@element-plus/colors/0.0.1-beta.7:
+    resolution: {integrity: sha512-TpPc9GPpF2rsG13uNsqIRnnzJCztIJbHt0csQn2i+CA21kgitH1ocrM5I5sxY+62Km10ojqMzunFHAK0FN50lw==}
+    dependencies:
+      '@ctrl/tinycolor': 3.4.1
     dev: false
 
   /@element-plus/icons-vue/1.1.4_vue@3.2.33:
