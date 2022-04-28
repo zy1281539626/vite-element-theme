@@ -2,7 +2,7 @@
 
 ## 1. 覆盖 element scss 变量，使用 vite 配置 additionalData
 
-- 主题颜色只能写死，只配置一次
+- 主题颜色只能写死，只配置一次，不能动态修改
 
 ```js
 // element.scss 覆盖变量
