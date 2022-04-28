@@ -47,21 +47,52 @@ export function lighterLevelColor(color, weightArr, mode="light") {
   return colors
 }
 
-
-export function generateMainColors(){
+/**
+ * generate main colors
+ * @param {*} colors 主要颜色
+ * @returns 
+ */
+export function generateMainColors(colors = {}){
   const prefix = "--el-color-"
-  const types = [
-    { type: 'primary', light: '#409eff', dark: '#409eff' },
-    { type: 'success', light: '#67c23a', dark: '#59b259' },
-    { type: 'warning', light: '#e6a23c', dark: '#d6a356' },
-    { type: 'danger', light: '#f56c6c', dark: '#cc5e5e' },
-    { type: 'error', light: '#f56c6c', dark: '#cc5e5e' },
-    { type: 'info', light: '#909399', dark: '#606266' }
-  ]
-  // const arr = lighterLevelColor(color, [0.3, 0.5, 0.7, 0.8, 0.9], mode)
-  // return arr.map(item=>{
-  //   return {
-  //     [prefix]: item
-  //   }
-  // })
+  let types = {
+    primary: { light: '#409eff', dark: '#409eff' },
+    success: { light: '#67c23a', dark: '#59b259' },
+    warning: { light: '#e6a23c', dark: '#d6a356' },
+    danger: { light: '#f56c6c', dark: '#cc5e5e' },
+    error: { light: '#f56c6c', dark: '#cc5e5e' },
+    info: {light: '#909399', dark: '#606266' }
+  }
+  types = { ...types, ...colors }
+  console.log(types)
+
+  const res = {}
+  Object.keys(types).forEach(type=>{
+    let item = types[type]
+    // weight
+    let weightArr = [0.3, 0.5, 0.7, 0.8, 0.9]
+    let lightColor = lighterLevelColor(item.light, weightArr)
+    let darkColor = lighterLevelColor(item.dark, weightArr, 'dark')
+    // light-mode color
+    lightColor.forEach((light, index)=>{
+      res.light = { ...res.light, ...{ [prefix+type+'-light-'+weightArr[index]*10]: light } }
+    })
+    // dark-mode color
+    darkColor.forEach((dark, index)=>{
+      res.dark = { ...res.dark, ...{ [prefix+type+'-light-'+weightArr[index]*10]: dark } }
+    })
+    // add base color
+    res.light[prefix+type] = item.light
+    res.dark[prefix+type] = item.dark
+    // add darker color
+    res.light[prefix+type+'-dark-2'] = getDarkerColor(item.light)
+    res.dark[prefix+type+'-dark-2'] = getDarkerColor(item.dark, 'dark') 
+  })
+  return res
 }
+
+
+// export function generateTextColors(colors = {}){
+//   const prefix = "--text-color-"
+
+
+// }
