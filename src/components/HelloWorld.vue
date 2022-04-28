@@ -29,9 +29,25 @@
 // import { generateColors, chalk } from '@element-plus/colors'
 import { computed, ref, watch } from 'vue'
 import { useCssVar } from '@vueuse/core'
+import { lighterLevelColor, getDarkerColor } from '../utils/color'
 export default {
   setup(){
     const changeDark = ref(false)
+
+    // light
+    const a = lighterLevelColor('#409eff', [0.3, 0.5, 0.9])
+    // console.log(a)
+    const dd = getDarkerColor('#409eff')
+    console.log(dd)
+    // dark
+    const b = lighterLevelColor('#409eff', [0.3, 0.5, 0.9], 'dark')
+    // console.log(b)
+    const ee = getDarkerColor('#409eff', 'dark')
+    console.log(ee)
+
+
+
+
 
     function generateElementColor(mode, color, type){
       // color mix
@@ -65,6 +81,9 @@ export default {
       for (let i = 1; i < 10; i += 1) {
         colorObj[`--el-color-${ type }-light-${mode === 'dark' ? i : 10 - i}`] = colorMix(mode === 'dark' ? '#141414' : '#ffffff', color, i * 0.1)
       }
+
+      // console.log(colorMix('#f0f5ff', '#000000', 0.85))
+
       return colorObj
     }
 
@@ -109,22 +128,22 @@ export default {
       themeColor.light = {...themeColor.light, ...light}
       themeColor.dark = {...themeColor.dark, ...dark}
     })
-    console.log(themeColor)
+    // console.log(themeColor)
 
     
-    const themeMode = (()=>{
-      return changeDark.value === true ? "dark" : "light"
-    })
+    // const themeMode = (()=>{
+    //   return changeDark.value === true ? "dark" : "light"
+    // })
 
-    watch(
-      themeMode,
-      (newValue) => {
-        for(let colorKey in themeColor[newValue]){
-          useCssVar(colorKey).value = themeColor[newValue][colorKey]
-        }
-        useCssVar('color-scheme').value = newValue
-      }
-    )
+    // watch(
+    //   themeMode,
+    //   (newValue) => {
+    //     for(let colorKey in themeColor[newValue]){
+    //       useCssVar(colorKey).value = themeColor[newValue][colorKey]
+    //     }
+    //     useCssVar('color-scheme').value = newValue
+    //   }
+    // )
 
     return {
       changeDark
