@@ -27,10 +27,16 @@
 <script>
 import { ref, watch } from 'vue'
 import { useCssVar } from '@vueuse/core'
-import { generateMainColors } from '../utils/color'
+import { generateMainColors, generateFillColors } from '../utils/color'
 export default {
   setup(){
     const changeDark = ref(false)
+
+    // const aa = colorMix('#141414' ,'#f0f5ff', 0.95)
+    // console.log(aa)
+    const aa = generateFillColors()
+    console.log(aa)
+
     
     const themeMode = (()=>{
       return changeDark.value === true ? "dark" : "light"
@@ -39,14 +45,29 @@ export default {
     let customColor = {
       primary: { light: '#cd2a86', dark: '#cd2a86' }
     }
-    const themeColor = generateMainColors(customColor)
-
+    
     watch(
       themeMode,
       (newValue) => {
-        for(let colorKey in themeColor[newValue]){
-          useCssVar(colorKey).value = themeColor[newValue][colorKey]
+        if(newValue === 'light') {
+          const themeColor = generateMainColors(customColor)
+          console.log(themeColor)
+          let a = themeColor[newValue]        
+          let styleEl = document.getElementById('custom-theme');
+          if(!styleEl){
+            styleEl = document.createElement('style');
+            styleEl.setAttribute('id','custom-theme');
+          }
+          styleEl.innerText = ':root'+JSON.stringify(a).replace(/\,/g, ';').replace(/\"/g, '')
+          document.head.append(styleEl)
+        }else{
+          document.getElementById('custom-theme')?.remove();
         }
+        
+
+        // for(let colorKey in themeColor[newValue]){
+        //   useCssVar(colorKey).value = themeColor[newValue][colorKey]
+        // }
         useCssVar('color-scheme').value = newValue
       },
       {
