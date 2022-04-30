@@ -1,6 +1,12 @@
 <template>
   <div>
     <h1 class="text-main-color">测试文字</h1>
+    <div style="display: flex">
+      Primary:
+      <el-color-picker v-model="primary" @change="changeColor('primary')" />
+      <el-row> 黑暗主题<el-switch v-model="changeDark"></el-switch> </el-row>
+    </div>
+
     <el-row class="mb-4">
       <el-button>Default</el-button>
       <el-button type="primary">Primary</el-button>
@@ -18,70 +24,90 @@
       <el-button type="warning" plain>Warning</el-button>
       <el-button type="danger" plain>Danger</el-button>
     </el-row>
-    <el-row>
-      黑暗主题<el-switch v-model="changeDark"></el-switch>
-    </el-row>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import { useCssVar } from '@vueuse/core'
-import { generateMainColors, generateFillColors } from '../utils/color'
+import { computed, reactive, ref, watch } from "vue";
+import { useCssVar } from "@vueuse/core";
+import {
+  generateMainColors,
+  generateTextColors,
+  generateBorderColors,
+  generateFillColors,
+  generateBgColors,
+  generateMaskColors,
+  generateBoxShadowColors,
+} from "../utils/color";
+import _ from "lodash-es";
+
 export default {
-  setup(){
-    const changeDark = ref(false)
+  setup() {
+    const primary = ref("#cd2a86");
 
-    // const aa = colorMix('#141414' ,'#f0f5ff', 0.95)
-    // console.log(aa)
-    const aa = generateFillColors()
-    console.log(aa)
+    const changeDark = ref(false);
+    const defineColor = reactive({
+      primary: { light: "#cd2a86", dark: "#cd2a86" },
+    });
 
-    
-    const themeMode = (()=>{
-      return changeDark.value === true ? "dark" : "light"
-    })
+    const themeMode = computed(() => {
+      return changeDark.value === true ? "dark" : "light";
+    });
 
-    let customColor = {
-      primary: { light: '#cd2a86', dark: '#cd2a86' }
-    }
-    
+    const a = computed(() => generateMainColors(defineColor));
+    const b = computed(() => generateTextColors());
+    const c = computed(() => generateBorderColors());
+    const d = computed(() => generateFillColors());
+    const e = computed(() => generateBgColors());
+    const f = computed(() => generateMaskColors());
+    const g = computed(() => generateBoxShadowColors());
+
+    const resColorsss = computed(() => {
+      return _.merge(
+        {},
+        a.value,
+        b.value,
+        c.value,
+        d.value,
+        e.value,
+        f.value,
+        g.value
+      );
+    });
+
     watch(
-      themeMode,
-      (newValue) => {
-        if(newValue === 'light') {
-          const themeColor = generateMainColors(customColor)
-          console.log(themeColor)
-          let a = themeColor[newValue]        
-          let styleEl = document.getElementById('custom-theme');
-          if(!styleEl){
-            styleEl = document.createElement('style');
-            styleEl.setAttribute('id','custom-theme');
-          }
-          styleEl.innerText = ':root'+JSON.stringify(a).replace(/\,/g, ';').replace(/\"/g, '')
-          document.head.append(styleEl)
-        }else{
-          document.getElementById('custom-theme')?.remove();
-        }
-        
+      [themeMode, defineColor],
+      ([newValue]) => {
+        const themeColor = resColorsss.value;
+        document.getElementById("custom-theme")?.remove();
 
-        // for(let colorKey in themeColor[newValue]){
-        //   useCssVar(colorKey).value = themeColor[newValue][colorKey]
-        // }
-        useCssVar('color-scheme').value = newValue
+        let currentTheme = themeColor[newValue];
+        let styleEl = document.createElement("style");
+        styleEl.setAttribute("id", "custom-theme");
+        currentTheme["color-scheme"] = newValue;
+        styleEl.innerHTML =
+          ":root" +
+          JSON.stringify(currentTheme).replace(/\,/g, ";").replace(/\"/g, "");
+        document.head.append(styleEl);
       },
       {
-        immediate: true
+        immediate: true,
+        deep: true,
       }
-    )
+    );
+
+    function changeColor(color) {
+      defineColor[color]["light"] = primary.value;
+      defineColor[color]["dark"] = primary.value;
+    }
 
     return {
-      changeDark
-    }
-  }
-}
+      changeDark,
+      primary,
+      changeColor,
+    };
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

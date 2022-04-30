@@ -4,6 +4,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.1
   '@vueuse/core': ^8.3.1
   element-plus: ^2.1.11
+  lodash-es: ^4.17.21
   sass: ^1.51.0
   unplugin-vue-components: ^0.19.3
   vite: ^2.9.5
@@ -12,6 +13,7 @@ specifiers:
 dependencies:
   '@vueuse/core': 8.3.1_vue@3.2.33
   element-plus: 2.1.11_vue@3.2.33
+  lodash-es: 4.17.21
   vue: 3.2.33
 
 devDependencies:
